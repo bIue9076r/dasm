@@ -1,0 +1,10 @@
+Init:
+HP = 0x64
+HG = 0x64
+STR HP 0x00	# [0x00] = Hp (100)
+STR HG 0x01	# [0x00] = Hunger (100)
+LDD A 0x00	# A = Start Screen
+DIS		# Display Start Screen
+
+Main:
+JMP Main
