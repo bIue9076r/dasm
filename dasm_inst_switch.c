@@ -500,6 +500,10 @@ void SwitchInst(byte inst){
 			Store_Imm_Adr();
 		break;
 
+		case I_SEND:
+			Send();
+		break;
+
 		default:
 			FL = FL | FLAG_HALT;
 		break;

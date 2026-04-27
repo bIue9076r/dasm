@@ -140,5 +140,6 @@ void Jump_Less(void);
 void Jump_Equal(void);
 
 void Store_Imm_Adr(void);
+void Send(void);
 
 #endif

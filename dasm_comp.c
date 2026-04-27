@@ -160,6 +160,7 @@ void freeContext(context_t* ctx){
 
 #define INSTN_NOP 0xFFDD0067
 #define INSTN_DIS 0xFFE32020
+#define INSTN_SND 0xFFDF7A8B
 #define INSTN_HLT 0xFFDFC7BD
 #define INSTN_LDD 0xFFE50939
 #define INSTN_POP 0xFFDBBCB7
@@ -283,6 +284,7 @@ int checkInst(char* inst){
 	switch(stn(inst)){
 		case INSTN_NOP:
 		case INSTN_DIS:
+		case INSTN_SND:
 		case INSTN_HLT:
 		case INSTN_LDD:
 		case INSTN_POP:
@@ -354,12 +356,13 @@ int expandContext(context_t* ctx){
 			word val1 = 0x0;
 			word val2 = 0x0;
 			switch(inst_n){
-				case INSTN_NOP: case INSTN_DIS: case INSTN_HLT:
-				case INSTN_TAB: case INSTN_TAC: case INSTN_TBA:
-				case INSTN_TBC: case INSTN_TCA: case INSTN_TCB:
-				case INSTN_POP: case INSTN_PUT: case INSTN_NOT:
-				case INSTN_LSH: case INSTN_RSH: case INSTN_INC:
-				case INSTN_DEC: case INSTN_JRE: case INSTN_JMP:
+				case INSTN_NOP: case INSTN_DIS: case INSTN_SND:
+				case INSTN_HLT: case INSTN_TAB: case INSTN_TAC:
+				case INSTN_TBA: case INSTN_TBC: case INSTN_TCA:
+				case INSTN_TCB: case INSTN_POP: case INSTN_PUT:
+				case INSTN_NOT: case INSTN_LSH: case INSTN_RSH:
+				case INSTN_INC: case INSTN_DEC: case INSTN_JRE:
+				case INSTN_JMP:
 					printf("Syntax Error: [%s] has less arguments\n",inst);
 					return -1;
 				break;
@@ -975,8 +978,8 @@ int expandContext(context_t* ctx){
 
 					ROM[position++] = I_JZER;
 					ROM[position++] = lowbyte(val1);
-					ROM[position++] = highbyte(val1);
-					ROM[position++] = lowbyte(val1);
+					ROM[position++] = highbyte(val2);
+					ROM[position++] = lowbyte(val2);
 				break;
 
 				case INSTN_JUN:
@@ -1002,8 +1005,8 @@ int expandContext(context_t* ctx){
 
 					ROM[position++] = I_JUDR;
 					ROM[position++] = lowbyte(val1);
-					ROM[position++] = highbyte(val1);
-					ROM[position++] = lowbyte(val1);
+					ROM[position++] = highbyte(val2);
+					ROM[position++] = lowbyte(val2);
 				break;
 
 				case INSTN_JOV:
@@ -1029,8 +1032,8 @@ int expandContext(context_t* ctx){
 
 					ROM[position++] = I_JOVR;
 					ROM[position++] = lowbyte(val1);
-					ROM[position++] = highbyte(val1);
-					ROM[position++] = lowbyte(val1);
+					ROM[position++] = highbyte(val2);
+					ROM[position++] = lowbyte(val2);
 				break;
 
 				case INSTN_JLT:
@@ -1056,8 +1059,8 @@ int expandContext(context_t* ctx){
 
 					ROM[position++] = I_JLES;
 					ROM[position++] = lowbyte(val1);
-					ROM[position++] = highbyte(val1);
-					ROM[position++] = lowbyte(val1);
+					ROM[position++] = highbyte(val2);
+					ROM[position++] = lowbyte(val2);
 				break;
 
 				case INSTN_JGT:
@@ -1083,8 +1086,8 @@ int expandContext(context_t* ctx){
 
 					ROM[position++] = I_JGTR;
 					ROM[position++] = lowbyte(val1);
-					ROM[position++] = highbyte(val1);
-					ROM[position++] = lowbyte(val1);
+					ROM[position++] = highbyte(val2);
+					ROM[position++] = lowbyte(val2);
 				break;
 
 				case INSTN_JEQ:
@@ -1110,8 +1113,8 @@ int expandContext(context_t* ctx){
 
 					ROM[position++] = I_JEQU;
 					ROM[position++] = lowbyte(val1);
-					ROM[position++] = highbyte(val1);
-					ROM[position++] = lowbyte(val1);
+					ROM[position++] = highbyte(val2);
+					ROM[position++] = lowbyte(val2);
 				break;
 			}
 			continue;
@@ -1123,9 +1126,10 @@ int expandContext(context_t* ctx){
 			char arg1_f = upper(arg1[0]);
 			word val = 0x0;
 			switch(inst_n){
-				case INSTN_NOP: case INSTN_DIS: case INSTN_HLT:
-				case INSTN_TAB: case INSTN_TAC: case INSTN_TBA:
-				case INSTN_TBC: case INSTN_TCA: case INSTN_TCB:
+				case INSTN_NOP: case INSTN_DIS: case INSTN_SND:
+				case INSTN_HLT: case INSTN_TAB: case INSTN_TAC:
+				case INSTN_TBA: case INSTN_TBC: case INSTN_TCA:
+				case INSTN_TCB:
 					printf("Syntax Error: [%s] has less arguments\n",inst);
 					return -1;
 				break;
@@ -1363,6 +1367,10 @@ int expandContext(context_t* ctx){
 
 				case INSTN_DIS:
 					ROM[position++] = I_DISP;
+				break;
+
+				case INSTN_SND:
+					ROM[position++] = I_SEND;
 				break;
 
 				case INSTN_HLT:

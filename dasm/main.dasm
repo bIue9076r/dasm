@@ -6,5 +6,9 @@ STR HG 0x01	# [0x00] = Hunger (100)
 LDD A 0x00	# A = Start Screen
 DIS		# Display Start Screen
 
+LDD A 0x1
 Main:
-JMP Main
+SND
+INC A
+JLT 0x11 Main
+HLT

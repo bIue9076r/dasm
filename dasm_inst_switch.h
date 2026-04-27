@@ -126,6 +126,7 @@
 #define I_JLES 0x79
 #define I_JEQU 0x7A
 #define I_STIA 0x7B
+#define I_SEND 0x7C
 
 #define I_HALT 0xFF
 

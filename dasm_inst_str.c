@@ -15,11 +15,11 @@ char* INST_STRS[0x100] = {
 	"ORC", "XOCI", "XOCA", "XOCB", "XOC", "NOT", "NOTB", "NOTC", "NOTA", "LSH",
 	"RSH", "LSHB", "RSHB", "LSHC", "RSHC", "LSHA", "RSHA", "INC", "INCB", "INCC",
 	"INCA", "DEC", "DECB", "DECC", "DECA", "JREL", "JUMP", "JZER", "JOVR", "JUDR",
-	"JGTR", "JLES", "JEQU", "STIA",
+	"JGTR", "JLES", "JEQU", "STIA", "SEND",
 };
 
 char* StrSwitchInst(byte inst){
-	if(inst > I_STIA){
+	if(inst > I_SEND){
 		return "HALT";
 	}
 

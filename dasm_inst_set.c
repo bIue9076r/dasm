@@ -851,4 +851,8 @@ void Store_Imm_Adr(void){
 	MEM[addr] = Imm;
 }
 
+void Send(void){
+	byte val = A;
+}
+
 #endif
