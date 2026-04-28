@@ -7,7 +7,7 @@ void Nop(void){
 }
 
 void Display(void){
-	byte Scr = A;
+	FL = FL | FLAG_DIS;
 }
 
 // A
@@ -41,11 +41,11 @@ void Store_A_Adr(void){
 }
 
 void Put_A(void){
-	STK[SP--] = A;
+	STK[SK--] = A;
 }
 
 void Pop_A(void){
-	STK[SP++] = A;
+	STK[SK++] = A;
 }
 
 void T_A_B(void){
@@ -87,11 +87,11 @@ void Store_B_Adr(void){
 }
 
 void Put_B(void){
-	STK[SP--] = B;
+	STK[SK--] = B;
 }
 
 void Pop_B(void){
-	STK[SP++] = B;
+	STK[SK++] = B;
 }
 
 void T_B_A(void){
@@ -133,11 +133,11 @@ void Store_C_Adr(void){
 }
 
 void Put_C(void){
-	STK[SP--] = C;
+	STK[SK--] = C;
 }
 
 void Pop_C(void){
-	STK[SP++] = C;
+	STK[SK++] = C;
 }
 
 void T_C_A(void){
@@ -852,7 +852,7 @@ void Store_Imm_Adr(void){
 }
 
 void Send(void){
-	byte val = A;
+	FL = FL | FLAG_INT;
 }
 
 #endif

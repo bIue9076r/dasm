@@ -18,7 +18,7 @@ extern word postIncAddr(void);
 #define PADR preIncAddr()
 #define ADRP postIncAddr()
 
-extern byte SP;
+extern byte SK;
 extern byte FL;
 
 #define FLAG_OVERFLOW 0x80
@@ -26,8 +26,8 @@ extern byte FL;
 #define FLAG_UNDERFLOW 0x20
 #define FLAG_HIGH_1 0x10
 #define FLAG_LOW_8 0x08
-#define FLAG_LOW_4 0x04
-#define FLAG_LOW_2 0x02
+#define FLAG_INT 0x04
+#define FLAG_DIS 0x02
 #define FLAG_HALT 0x01
 
 void flag_clear(void);

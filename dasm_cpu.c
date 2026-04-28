@@ -21,7 +21,7 @@ inline word postIncAddr(){
 }
 
 
-byte SP = 0xFF;	// Stack Pointer
+byte SK = 0xFF;	// Stack Pointer
 byte FL = 0;	// 0000 0000
 					// OZU- ---H
 					// O - Overflow
