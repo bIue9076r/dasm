@@ -4,6 +4,7 @@
 #include "dasm_cpu.h"
 #include "dasm_pack.h"
 
+#ifndef DASM_SET_NON_STATIC_ROM
 void PackRom(char* path){
 	FILE* file = fopen(path,"wb");
 	if(file == NULL){
@@ -27,5 +28,6 @@ void LoadRom(char* path){
 	fclose(file);
 	return;
 }
+#endif
 
 #endif

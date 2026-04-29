@@ -332,17 +332,19 @@ int checkInst(char* inst){
 }
 
 int expandContext(context_t* ctx){
-	word position = 0x00;
+	ADDR = 0x00;
 	char* inst = NULL;
 	char* arg1 = NULL;
 	char* arg2 = NULL;
 
 	for(int i = 0; i < ctx->inst_size; i++){
+		#ifdef DEBUG_SUM
 		printf("[%s] [%s], [%s];\n",
 			ctx->inst_list[i].inst,
 			ctx->inst_list[i].arg1,
 			ctx->inst_list[i].arg2
 		);
+		#endif
 
 		inst = ctx->inst_list[i].inst;
 		arg1 = ctx->inst_list[i].arg1;
@@ -379,34 +381,34 @@ int expandContext(context_t* ctx){
 						switch(arg1_f){
 							case 'A':
 								if(val1 < 0x100){
-									ROM[position++] = I_LDAI;
-									ROM[position++] = lowbyte(val1);
+									SetRom(ADRP,I_LDAI);
+									SetRom(ADRP,lowbyte(val1));
 								}else{
-									ROM[position++] = I_LDAA;
-									ROM[position++] = highbyte(val1);
-									ROM[position++] = lowbyte(val1);
+									SetRom(ADRP,I_LDAA);
+									SetRom(ADRP,highbyte(val1));
+									SetRom(ADRP,lowbyte(val1));
 								}
 							break;
 
 							case 'B':
 								if(val1 < 0x100){
-									ROM[position++] = I_LDBI;
-									ROM[position++] = lowbyte(val1);
+									SetRom(ADRP,I_LDBI);
+									SetRom(ADRP,lowbyte(val1));
 								}else{
-									ROM[position++] = I_LDBA;
-									ROM[position++] = highbyte(val1);
-									ROM[position++] = lowbyte(val1);
+									SetRom(ADRP,I_LDBA);
+									SetRom(ADRP,highbyte(val1));
+									SetRom(ADRP,lowbyte(val1));
 								}
 							break;
 
 							case 'C':
 								if(val1 < 0x100){
-									ROM[position++] = I_LDCI;
-									ROM[position++] = lowbyte(val1);
+									SetRom(ADRP,I_LDCI);
+									SetRom(ADRP,lowbyte(val1));
 								}else{
-									ROM[position++] = I_LDCA;
-									ROM[position++] = highbyte(val1);
-									ROM[position++] = lowbyte(val1);
+									SetRom(ADRP,I_LDCA);
+									SetRom(ADRP,highbyte(val1));
+									SetRom(ADRP,lowbyte(val1));
 								}
 							break;
 						}
@@ -434,24 +436,24 @@ int expandContext(context_t* ctx){
 					if(arg1_f >= 'A' && arg1_f <= 'C'){
 						switch(arg1_f){
 							case 'A':
-								ROM[position++] = I_STAA;
+								SetRom(ADRP,I_STAA);
 							break;
 
 							case 'B':
-								ROM[position++] = I_STBA;
+								SetRom(ADRP,I_STBA);
 							break;
 
 							case 'C':
-								ROM[position++] = I_STCA;
+								SetRom(ADRP,I_STCA);
 							break;
 						}
-						ROM[position++] = highbyte(val2);
-						ROM[position++] = lowbyte(val2);
+						SetRom(ADRP,highbyte(val2));
+						SetRom(ADRP,lowbyte(val2));
 					}else{
-						ROM[position++] = I_STIA;
-						ROM[position++] = lowbyte(val1);
-						ROM[position++] = highbyte(val2);
-						ROM[position++] = lowbyte(val2);
+						SetRom(ADRP,I_STIA);
+						SetRom(ADRP,lowbyte(val1));
+						SetRom(ADRP,highbyte(val2));
+						SetRom(ADRP,lowbyte(val2));
 					}
 				break;
 
@@ -474,21 +476,21 @@ int expandContext(context_t* ctx){
 										break;
 
 										case 'B':
-											ROM[position++] = I_ADAB;
+											SetRom(ADRP,I_ADAB);
 										break;
 
 										case 'C':
-											ROM[position++] = I_ADAC;
+											SetRom(ADRP,I_ADAC);
 										break;
 									}
 								}else{
 									if(val1 < 0x100){
-										ROM[position++] = I_ADAI;
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_ADAI);
+										SetRom(ADRP,lowbyte(val1));
 									}else{
-										ROM[position++] = I_ADAA;
-										ROM[position++] = highbyte(val1);
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_ADAA);
+										SetRom(ADRP,highbyte(val1));
+										SetRom(ADRP,lowbyte(val1));
 									}
 								}
 							break;
@@ -497,7 +499,7 @@ int expandContext(context_t* ctx){
 								if(arg2_f >= 'A' && arg2_f <= 'C'){
 									switch(arg2_f){
 										case 'A':
-											ROM[position++] = I_ADBA;
+											SetRom(ADRP,I_ADBA);
 										break;
 
 										case 'B':
@@ -506,17 +508,17 @@ int expandContext(context_t* ctx){
 										break;
 
 										case 'C':
-											ROM[position++] = I_ADBC;
+											SetRom(ADRP,I_ADBC);
 										break;
 									}
 								}else{
 									if(val1 < 0x100){
-										ROM[position++] = I_ADBI;
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_ADBI);
+										SetRom(ADRP,lowbyte(val1));
 									}else{
-										ROM[position++] = I_ADBA;
-										ROM[position++] = highbyte(val1);
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_ADBA);
+										SetRom(ADRP,highbyte(val1));
+										SetRom(ADRP,lowbyte(val1));
 									}
 								}
 							break;
@@ -525,11 +527,11 @@ int expandContext(context_t* ctx){
 								if(arg2_f >= 'A' && arg2_f <= 'C'){
 									switch(arg2_f){
 										case 'A':
-											ROM[position++] = I_ADCA;
+											SetRom(ADRP,I_ADCA);
 										break;
 
 										case 'B':
-											ROM[position++] = I_ADCB;
+											SetRom(ADRP,I_ADCB);
 										break;
 
 										case 'C':
@@ -539,12 +541,12 @@ int expandContext(context_t* ctx){
 									}
 								}else{
 									if(val1 < 0x100){
-										ROM[position++] = I_ADCI;
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_ADCI);
+										SetRom(ADRP,lowbyte(val1));
 									}else{
-										ROM[position++] = I_ADCA;
-										ROM[position++] = highbyte(val1);
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_ADCA);
+										SetRom(ADRP,highbyte(val1));
+										SetRom(ADRP,lowbyte(val1));
 									}
 								}
 							break;
@@ -574,21 +576,21 @@ int expandContext(context_t* ctx){
 										break;
 
 										case 'B':
-											ROM[position++] = I_SUAB;
+											SetRom(ADRP,I_SUAB);
 										break;
 
 										case 'C':
-											ROM[position++] = I_SUAC;
+											SetRom(ADRP,I_SUAC);
 										break;
 									}
 								}else{
 									if(val1 < 0x100){
-										ROM[position++] = I_SUAI;
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_SUAI);
+										SetRom(ADRP,lowbyte(val1));
 									}else{
-										ROM[position++] = I_SUAA;
-										ROM[position++] = highbyte(val1);
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_SUAA);
+										SetRom(ADRP,highbyte(val1));
+										SetRom(ADRP,lowbyte(val1));
 									}
 								}
 							break;
@@ -597,7 +599,7 @@ int expandContext(context_t* ctx){
 								if(arg2_f >= 'A' && arg2_f <= 'C'){
 									switch(arg2_f){
 										case 'A':
-											ROM[position++] = I_SUBA;
+											SetRom(ADRP,I_SUBA);
 										break;
 
 										case 'B':
@@ -606,17 +608,17 @@ int expandContext(context_t* ctx){
 										break;
 
 										case 'C':
-											ROM[position++] = I_SUBC;
+											SetRom(ADRP,I_SUBC);
 										break;
 									}
 								}else{
 									if(val1 < 0x100){
-										ROM[position++] = I_SUBI;
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_SUBI);
+										SetRom(ADRP,lowbyte(val1));
 									}else{
-										ROM[position++] = I_SUBA;
-										ROM[position++] = highbyte(val1);
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_SUBA);
+										SetRom(ADRP,highbyte(val1));
+										SetRom(ADRP,lowbyte(val1));
 									}
 								}
 							break;
@@ -625,11 +627,11 @@ int expandContext(context_t* ctx){
 								if(arg2_f >= 'A' && arg2_f <= 'C'){
 									switch(arg2_f){
 										case 'A':
-											ROM[position++] = I_SUCA;
+											SetRom(ADRP,I_SUCA);
 										break;
 
 										case 'B':
-											ROM[position++] = I_SUCB;
+											SetRom(ADRP,I_SUCB);
 										break;
 
 										case 'C':
@@ -639,12 +641,12 @@ int expandContext(context_t* ctx){
 									}
 								}else{
 									if(val1 < 0x100){
-										ROM[position++] = I_SUCI;
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_SUCI);
+										SetRom(ADRP,lowbyte(val1));
 									}else{
-										ROM[position++] = I_SUCA;
-										ROM[position++] = highbyte(val1);
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_SUCA);
+										SetRom(ADRP,highbyte(val1));
+										SetRom(ADRP,lowbyte(val1));
 									}
 								}
 							break;
@@ -674,21 +676,21 @@ int expandContext(context_t* ctx){
 										break;
 
 										case 'B':
-											ROM[position++] = I_MUAB;
+											SetRom(ADRP,I_MUAB);
 										break;
 
 										case 'C':
-											ROM[position++] = I_MUAC;
+											SetRom(ADRP,I_MUAC);
 										break;
 									}
 								}else{
 									if(val1 < 0x100){
-										ROM[position++] = I_MUAI;
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_MUAI);
+										SetRom(ADRP,lowbyte(val1));
 									}else{
-										ROM[position++] = I_MUAA;
-										ROM[position++] = highbyte(val1);
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_MUAA);
+										SetRom(ADRP,highbyte(val1));
+										SetRom(ADRP,lowbyte(val1));
 									}
 								}
 							break;
@@ -697,7 +699,7 @@ int expandContext(context_t* ctx){
 								if(arg2_f >= 'A' && arg2_f <= 'C'){
 									switch(arg2_f){
 										case 'A':
-											ROM[position++] = I_MUBA;
+											SetRom(ADRP,I_MUBA);
 										break;
 
 										case 'B':
@@ -706,17 +708,17 @@ int expandContext(context_t* ctx){
 										break;
 
 										case 'C':
-											ROM[position++] = I_MUBC;
+											SetRom(ADRP,I_MUBC);
 										break;
 									}
 								}else{
 									if(val1 < 0x100){
-										ROM[position++] = I_MUBI;
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_MUBI);
+										SetRom(ADRP,lowbyte(val1));
 									}else{
-										ROM[position++] = I_MUBA;
-										ROM[position++] = highbyte(val1);
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_MUBA);
+										SetRom(ADRP,highbyte(val1));
+										SetRom(ADRP,lowbyte(val1));
 									}
 								}
 							break;
@@ -725,11 +727,11 @@ int expandContext(context_t* ctx){
 								if(arg2_f >= 'A' && arg2_f <= 'C'){
 									switch(arg2_f){
 										case 'A':
-											ROM[position++] = I_MUCA;
+											SetRom(ADRP,I_MUCA);
 										break;
 
 										case 'B':
-											ROM[position++] = I_MUCB;
+											SetRom(ADRP,I_MUCB);
 										break;
 
 										case 'C':
@@ -739,12 +741,12 @@ int expandContext(context_t* ctx){
 									}
 								}else{
 									if(val1 < 0x100){
-										ROM[position++] = I_MUCI;
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_MUCI);
+										SetRom(ADRP,lowbyte(val1));
 									}else{
-										ROM[position++] = I_MUCA;
-										ROM[position++] = highbyte(val1);
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_MUCA);
+										SetRom(ADRP,highbyte(val1));
+										SetRom(ADRP,lowbyte(val1));
 									}
 								}
 							break;
@@ -774,21 +776,21 @@ int expandContext(context_t* ctx){
 										break;
 
 										case 'B':
-											ROM[position++] = I_ORAB;
+											SetRom(ADRP,I_ORAB);
 										break;
 
 										case 'C':
-											ROM[position++] = I_ORAC;
+											SetRom(ADRP,I_ORAC);
 										break;
 									}
 								}else{
 									if(val1 < 0x100){
-										ROM[position++] = I_ORAI;
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_ORAI);
+										SetRom(ADRP,lowbyte(val1));
 									}else{
-										ROM[position++] = I_ORAA;
-										ROM[position++] = highbyte(val1);
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_ORAA);
+										SetRom(ADRP,highbyte(val1));
+										SetRom(ADRP,lowbyte(val1));
 									}
 								}
 							break;
@@ -797,7 +799,7 @@ int expandContext(context_t* ctx){
 								if(arg2_f >= 'A' && arg2_f <= 'C'){
 									switch(arg2_f){
 										case 'A':
-											ROM[position++] = I_ORBA;
+											SetRom(ADRP,I_ORBA);
 										break;
 
 										case 'B':
@@ -806,17 +808,17 @@ int expandContext(context_t* ctx){
 										break;
 
 										case 'C':
-											ROM[position++] = I_ORBC;
+											SetRom(ADRP,I_ORBC);
 										break;
 									}
 								}else{
 									if(val1 < 0x100){
-										ROM[position++] = I_ORBI;
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_ORBI);
+										SetRom(ADRP,lowbyte(val1));
 									}else{
-										ROM[position++] = I_ORBA;
-										ROM[position++] = highbyte(val1);
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_ORBA);
+										SetRom(ADRP,highbyte(val1));
+										SetRom(ADRP,lowbyte(val1));
 									}
 								}
 							break;
@@ -825,11 +827,11 @@ int expandContext(context_t* ctx){
 								if(arg2_f >= 'A' && arg2_f <= 'C'){
 									switch(arg2_f){
 										case 'A':
-											ROM[position++] = I_ORCA;
+											SetRom(ADRP,I_ORCA);
 										break;
 
 										case 'B':
-											ROM[position++] = I_ORCB;
+											SetRom(ADRP,I_ORCB);
 										break;
 
 										case 'C':
@@ -839,12 +841,12 @@ int expandContext(context_t* ctx){
 									}
 								}else{
 									if(val1 < 0x100){
-										ROM[position++] = I_ORCI;
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_ORCI);
+										SetRom(ADRP,lowbyte(val1));
 									}else{
-										ROM[position++] = I_ORCA;
-										ROM[position++] = highbyte(val1);
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_ORCA);
+										SetRom(ADRP,highbyte(val1));
+										SetRom(ADRP,lowbyte(val1));
 									}
 								}
 							break;
@@ -874,21 +876,21 @@ int expandContext(context_t* ctx){
 										break;
 
 										case 'B':
-											ROM[position++] = I_XOAB;
+											SetRom(ADRP,I_XOAB);
 										break;
 
 										case 'C':
-											ROM[position++] = I_XOAC;
+											SetRom(ADRP,I_XOAC);
 										break;
 									}
 								}else{
 									if(val1 < 0x100){
-										ROM[position++] = I_XOAI;
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_XOAI);
+										SetRom(ADRP,lowbyte(val1));
 									}else{
-										ROM[position++] = I_XOAA;
-										ROM[position++] = highbyte(val1);
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_XOAA);
+										SetRom(ADRP,highbyte(val1));
+										SetRom(ADRP,lowbyte(val1));
 									}
 								}
 							break;
@@ -897,7 +899,7 @@ int expandContext(context_t* ctx){
 								if(arg2_f >= 'A' && arg2_f <= 'C'){
 									switch(arg2_f){
 										case 'A':
-											ROM[position++] = I_XOBA;
+											SetRom(ADRP,I_XOBA);
 										break;
 
 										case 'B':
@@ -906,17 +908,17 @@ int expandContext(context_t* ctx){
 										break;
 
 										case 'C':
-											ROM[position++] = I_XOBC;
+											SetRom(ADRP,I_XOBC);
 										break;
 									}
 								}else{
 									if(val1 < 0x100){
-										ROM[position++] = I_XOBI;
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_XOBI);
+										SetRom(ADRP,lowbyte(val1));
 									}else{
-										ROM[position++] = I_XOBA;
-										ROM[position++] = highbyte(val1);
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_XOBA);
+										SetRom(ADRP,highbyte(val1));
+										SetRom(ADRP,lowbyte(val1));
 									}
 								}
 							break;
@@ -925,11 +927,11 @@ int expandContext(context_t* ctx){
 								if(arg2_f >= 'A' && arg2_f <= 'C'){
 									switch(arg2_f){
 										case 'A':
-											ROM[position++] = I_XOCA;
+											SetRom(ADRP,I_XOCA);
 										break;
 
 										case 'B':
-											ROM[position++] = I_XOCB;
+											SetRom(ADRP,I_XOCB);
 										break;
 
 										case 'C':
@@ -939,12 +941,12 @@ int expandContext(context_t* ctx){
 									}
 								}else{
 									if(val1 < 0x100){
-										ROM[position++] = I_XOCI;
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_XOCI);
+										SetRom(ADRP,lowbyte(val1));
 									}else{
-										ROM[position++] = I_XOCA;
-										ROM[position++] = highbyte(val1);
-										ROM[position++] = lowbyte(val1);
+										SetRom(ADRP,I_XOCA);
+										SetRom(ADRP,highbyte(val1));
+										SetRom(ADRP,lowbyte(val1));
 									}
 								}
 							break;
@@ -976,10 +978,10 @@ int expandContext(context_t* ctx){
 						}
 					}
 
-					ROM[position++] = I_JZER;
-					ROM[position++] = lowbyte(val1);
-					ROM[position++] = highbyte(val2);
-					ROM[position++] = lowbyte(val2);
+					SetRom(ADRP,I_JZER);
+					SetRom(ADRP,lowbyte(val1));
+					SetRom(ADRP,highbyte(val2));
+					SetRom(ADRP,lowbyte(val2));
 				break;
 
 				case INSTN_JUN:
@@ -1003,10 +1005,10 @@ int expandContext(context_t* ctx){
 						}
 					}
 
-					ROM[position++] = I_JUDR;
-					ROM[position++] = lowbyte(val1);
-					ROM[position++] = highbyte(val2);
-					ROM[position++] = lowbyte(val2);
+					SetRom(ADRP,I_JUDR);
+					SetRom(ADRP,lowbyte(val1));
+					SetRom(ADRP,highbyte(val2));
+					SetRom(ADRP,lowbyte(val2));
 				break;
 
 				case INSTN_JOV:
@@ -1030,10 +1032,10 @@ int expandContext(context_t* ctx){
 						}
 					}
 
-					ROM[position++] = I_JOVR;
-					ROM[position++] = lowbyte(val1);
-					ROM[position++] = highbyte(val2);
-					ROM[position++] = lowbyte(val2);
+					SetRom(ADRP,I_JOVR);
+					SetRom(ADRP,lowbyte(val1));
+					SetRom(ADRP,highbyte(val2));
+					SetRom(ADRP,lowbyte(val2));
 				break;
 
 				case INSTN_JLT:
@@ -1057,10 +1059,10 @@ int expandContext(context_t* ctx){
 						}
 					}
 
-					ROM[position++] = I_JLES;
-					ROM[position++] = lowbyte(val1);
-					ROM[position++] = highbyte(val2);
-					ROM[position++] = lowbyte(val2);
+					SetRom(ADRP,I_JLES);
+					SetRom(ADRP,lowbyte(val1));
+					SetRom(ADRP,highbyte(val2));
+					SetRom(ADRP,lowbyte(val2));
 				break;
 
 				case INSTN_JGT:
@@ -1084,10 +1086,10 @@ int expandContext(context_t* ctx){
 						}
 					}
 
-					ROM[position++] = I_JGTR;
-					ROM[position++] = lowbyte(val1);
-					ROM[position++] = highbyte(val2);
-					ROM[position++] = lowbyte(val2);
+					SetRom(ADRP,I_JGTR);
+					SetRom(ADRP,lowbyte(val1));
+					SetRom(ADRP,highbyte(val2));
+					SetRom(ADRP,lowbyte(val2));
 				break;
 
 				case INSTN_JEQ:
@@ -1111,10 +1113,10 @@ int expandContext(context_t* ctx){
 						}
 					}
 
-					ROM[position++] = I_JEQU;
-					ROM[position++] = lowbyte(val1);
-					ROM[position++] = highbyte(val2);
-					ROM[position++] = lowbyte(val2);
+					SetRom(ADRP,I_JEQU);
+					SetRom(ADRP,lowbyte(val1));
+					SetRom(ADRP,highbyte(val2));
+					SetRom(ADRP,lowbyte(val2));
 				break;
 			}
 			continue;
@@ -1138,15 +1140,15 @@ int expandContext(context_t* ctx){
 					if(arg1_f >= 'A' && arg1_f <= 'C'){
 						switch(arg1_f){
 							case 'A':
-								ROM[position++] = I_POA;
+								SetRom(ADRP,I_POA);
 							break;
 
 							case 'B':
-								ROM[position++] = I_POB;
+								SetRom(ADRP,I_POB);
 							break;
 
 							case 'C':
-								ROM[position++] = I_POC;
+								SetRom(ADRP,I_POC);
 							break;
 						}
 					}else{
@@ -1159,15 +1161,15 @@ int expandContext(context_t* ctx){
 					if(arg1_f >= 'A' && arg1_f <= 'C'){
 						switch(arg1_f){
 							case 'A':
-								ROM[position++] = I_PUA;
+								SetRom(ADRP,I_PUA);
 							break;
 
 							case 'B':
-								ROM[position++] = I_PUB;
+								SetRom(ADRP,I_PUB);
 							break;
 
 							case 'C':
-								ROM[position++] = I_PUC;
+								SetRom(ADRP,I_PUC);
 							break;
 						}
 					}else{
@@ -1180,15 +1182,15 @@ int expandContext(context_t* ctx){
 					if(arg1_f >= 'A' && arg1_f <= 'C'){
 						switch(arg1_f){
 							case 'A':
-								ROM[position++] = I_NOT;
+								SetRom(ADRP,I_NOT);
 							break;
 
 							case 'B':
-								ROM[position++] = I_NOTB;
+								SetRom(ADRP,I_NOTB);
 							break;
 
 							case 'C':
-								ROM[position++] = I_NOTC;
+								SetRom(ADRP,I_NOTC);
 							break;
 						}
 					}else{
@@ -1199,9 +1201,9 @@ int expandContext(context_t* ctx){
 							}
 						}
 
-						ROM[position++] = I_NOTA;
-						ROM[position++] = highbyte(val);
-						ROM[position++] = lowbyte(val);
+						SetRom(ADRP,I_NOTA);
+						SetRom(ADRP,highbyte(val));
+						SetRom(ADRP,lowbyte(val));
 					}
 				break;
 
@@ -1209,15 +1211,15 @@ int expandContext(context_t* ctx){
 					if(arg1_f >= 'A' && arg1_f <= 'C'){
 						switch(arg1_f){
 							case 'A':
-								ROM[position++] = I_LSH;
+								SetRom(ADRP,I_LSH);
 							break;
 
 							case 'B':
-								ROM[position++] = I_LSHB;
+								SetRom(ADRP,I_LSHB);
 							break;
 
 							case 'C':
-								ROM[position++] = I_LSHC;
+								SetRom(ADRP,I_LSHC);
 							break;
 						}
 					}else{
@@ -1228,9 +1230,9 @@ int expandContext(context_t* ctx){
 							}
 						}
 
-						ROM[position++] = I_LSHA;
-						ROM[position++] = highbyte(val);
-						ROM[position++] = lowbyte(val);
+						SetRom(ADRP,I_LSHA);
+						SetRom(ADRP,highbyte(val));
+						SetRom(ADRP,lowbyte(val));
 					}
 				break;
 
@@ -1238,15 +1240,15 @@ int expandContext(context_t* ctx){
 					if(arg1_f >= 'A' && arg1_f <= 'C'){
 						switch(arg1_f){
 							case 'A':
-								ROM[position++] = I_RSH;
+								SetRom(ADRP,I_RSH);
 							break;
 
 							case 'B':
-								ROM[position++] = I_RSHB;
+								SetRom(ADRP,I_RSHB);
 							break;
 
 							case 'C':
-								ROM[position++] = I_RSHC;
+								SetRom(ADRP,I_RSHC);
 							break;
 						}
 					}else{
@@ -1257,9 +1259,9 @@ int expandContext(context_t* ctx){
 							}
 						}
 
-						ROM[position++] = I_RSHA;
-						ROM[position++] = highbyte(val);
-						ROM[position++] = lowbyte(val);
+						SetRom(ADRP,I_RSHA);
+						SetRom(ADRP,highbyte(val));
+						SetRom(ADRP,lowbyte(val));
 					}
 				break;
 
@@ -1267,15 +1269,15 @@ int expandContext(context_t* ctx){
 					if(arg1_f >= 'A' && arg1_f <= 'C'){
 						switch(arg1_f){
 							case 'A':
-								ROM[position++] = I_INC;
+								SetRom(ADRP,I_INC);
 							break;
 
 							case 'B':
-								ROM[position++] = I_INCB;
+								SetRom(ADRP,I_INCB);
 							break;
 
 							case 'C':
-								ROM[position++] = I_INCC;
+								SetRom(ADRP,I_INCC);
 							break;
 						}
 					}else{
@@ -1286,9 +1288,9 @@ int expandContext(context_t* ctx){
 							}
 						}
 
-						ROM[position++] = I_INCA;
-						ROM[position++] = highbyte(val);
-						ROM[position++] = lowbyte(val);
+						SetRom(ADRP,I_INCA);
+						SetRom(ADRP,highbyte(val));
+						SetRom(ADRP,lowbyte(val));
 					}
 				break;
 
@@ -1296,15 +1298,15 @@ int expandContext(context_t* ctx){
 					if(arg1_f >= 'A' && arg1_f <= 'C'){
 						switch(arg1_f){
 							case 'A':
-								ROM[position++] = I_DEC;
+								SetRom(ADRP,I_DEC);
 							break;
 
 							case 'B':
-								ROM[position++] = I_DECB;
+								SetRom(ADRP,I_DECB);
 							break;
 
 							case 'C':
-								ROM[position++] = I_DECC;
+								SetRom(ADRP,I_DECC);
 							break;
 						}
 					}else{
@@ -1316,16 +1318,16 @@ int expandContext(context_t* ctx){
 							}
 						}
 
-						ROM[position++] = I_DECA;
-						ROM[position++] = highbyte(val);
-						ROM[position++] = lowbyte(val);
+						SetRom(ADRP,I_DECA);
+						SetRom(ADRP,highbyte(val));
+						SetRom(ADRP,lowbyte(val));
 					}
 				break;
 
 				case INSTN_JRE:
 					val = parseWord(arg1);
-					ROM[position++] = I_JREL;
-					ROM[position++] = lowbyte(val);
+					SetRom(ADRP,I_JREL);
+					SetRom(ADRP,lowbyte(val));
 				break;
 
 				case INSTN_JMP:
@@ -1342,9 +1344,9 @@ int expandContext(context_t* ctx){
 						}
 					}
 
-					ROM[position++] = I_JUMP;
-					ROM[position++] = highbyte(val);
-					ROM[position++] = lowbyte(val);
+					SetRom(ADRP,I_JUMP);
+					SetRom(ADRP,highbyte(val));
+					SetRom(ADRP,lowbyte(val));
 				break;
 
 				case INSTN_LDD: case INSTN_STR: case INSTN_ADD: case INSTN_SUB:
@@ -1362,43 +1364,43 @@ int expandContext(context_t* ctx){
 			int inst_n = stn(inst);
 			switch(inst_n){
 				case INSTN_NOP:
-					ROM[position++] = I_NOP;
+					SetRom(ADRP,I_NOP);
 				break;
 
 				case INSTN_DIS:
-					ROM[position++] = I_DISP;
+					SetRom(ADRP,I_DISP);
 				break;
 
 				case INSTN_SND:
-					ROM[position++] = I_SEND;
+					SetRom(ADRP,I_SEND);
 				break;
 
 				case INSTN_HLT:
-					ROM[position++] = I_HALT;
+					SetRom(ADRP,I_HALT);
 				break;
 
 				case INSTN_TAB:
-					ROM[position++] = I_TAB;
+					SetRom(ADRP,I_TAB);
 				break;
 
 				case INSTN_TAC:
-					ROM[position++] = I_TAC;
+					SetRom(ADRP,I_TAC);
 				break;
 
 				case INSTN_TBA:
-					ROM[position++] = I_TBA;
+					SetRom(ADRP,I_TBA);
 				break;
 
 				case INSTN_TBC:
-					ROM[position++] = I_TBC;
+					SetRom(ADRP,I_TBC);
 				break;
 
 				case INSTN_TCA:
-					ROM[position++] = I_TCA;
+					SetRom(ADRP,I_TCA);
 				break;
 
 				case INSTN_TCB:
-					ROM[position++] = I_TCB;
+					SetRom(ADRP,I_TCB);
 				break;
 
 				case INSTN_LDD: case INSTN_POP: case INSTN_PUT: case INSTN_STR: case INSTN_ADD:
@@ -1413,7 +1415,7 @@ int expandContext(context_t* ctx){
 				default:
 					for(int i = 0; i < ctx->labels_size; i++){
 						if(stn(ctx->labels[i].Name) == inst_n){
-							ctx->labels[i].position = position;
+							ctx->labels[i].position = ADDR;
 						}
 					}
 				break;
@@ -1677,13 +1679,7 @@ int ReadFile(char* path, context_t* ctx){
 }
 
 int WriteFile(char* path){
-	FILE* file = fopen(path,"w");
-	if(file == NULL){
-		return -1;
-	}
-
-	fwrite(ROM,sizeof(byte) * MAX_ROM,1,file);
-	fclose(file);
+	PackRom(path);
 	return 0;
 }
 
@@ -1701,10 +1697,12 @@ int main(int argc, char** argv){
 	if(argc > 2){
 		O = argv[2];
 	}
-	
+
+	printf("Dasm - Compiling [%s]\n",P);
 	ReadFile(P,&context);
 	expandContext(&context);
 	freeContext(&context);
+	printf("Dasm - Writing [%s]\n",O);
 	WriteFile(O);
 	return 0;
 }

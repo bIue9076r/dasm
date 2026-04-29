@@ -32,7 +32,7 @@ int main(void){
 	LoadRom("rom.drom");
 	
 	while(!(FL & FLAG_HALT)){
-		byte inst = ROM[ADDR++];
+		byte inst = RomFetch();
 		SwitchInst(inst);
 		printf("Inst = %s\n",StrSwitchInst(inst));
 		Status();

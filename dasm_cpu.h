@@ -1,25 +1,56 @@
 #ifndef DASM_CPU_H
 #define DASM_CPU_H
 #include "dasm_type.h"
+// Some systems cannot have 0x8000+ bytes
+#ifndef DASM_SET_NON_STATIC_ROM
+#define DASM_STATIC_ROM
+#endif
+
+#ifndef DASM_SET_NON_STATIC_MEM
+#define DASM_STATIC_MEM
+#endif
+
+#ifndef DASM_SET_NON_STATIC_STK
+#define DASM_STATIC_STK
+#endif
 
 #define MAX_STACK 0x0100
-#define MAX_ROM 0x4000
+#define MAX_ROM 0x8000
 #define MAX_MEM 0x0800
 
-extern byte STK[0x100];		// Stack
-extern byte ROM[0x4000];	// ROM
-extern byte MEM[0x0800];	// Memory
+#ifdef DASM_STATIC_STK
+extern byte STK[MAX_STACK];	// Stack
+#endif
+
+#ifdef DASM_STATIC_ROM
+extern byte ROM[MAX_ROM];	// ROM
+#endif
+
+#ifdef DASM_STATIC_MEM
+extern byte MEM[MAX_MEM];	// Memory
+#endif
+
 extern word ADDR;			// Address
 
-extern word preIncAddr(void);
+word preIncAddr(void);
 
-extern word postIncAddr(void);
+word postIncAddr(void);
 
 #define PADR preIncAddr()
 #define ADRP postIncAddr()
 
+byte GetRom(word addr);
+void SetRom(word addr, byte b);
+
 extern byte SK;
 extern byte FL;
+
+byte RomFetch(void);
+byte RomFetchPeek(void);
+byte GetMem(word addr);
+void SetMem(word addr, byte b);
+byte StkPop();
+void StkPut(byte b);
 
 #define FLAG_OVERFLOW 0x80
 #define FLAG_ZERO 0x40

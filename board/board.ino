@@ -8,6 +8,14 @@
 #include <dasm_inst_set.h>
 #include <dasm_inst_switch.h>
 
+byte GetRom(word addr){
+	// return ROM[addr];
+}
+
+void SetRom(word addr, byte b){
+	// ROM[addr] = b;
+}
+
 static File f;
 
 Adafruit_SSD1306 display;
@@ -22,7 +30,11 @@ void setup() {
 
 	// Read File or default rom
 	f = SD.open("main.rom",FILE_READ);
-	if()
+	SetRom(0,I_SEND);
+	SetRom(1,0x01);
+	SetRom(2,I_JUMP);
+	SetRom(3,0x00);
+	SetRom(4,0x00);
 }
 
 void display_handler(){
@@ -31,11 +43,13 @@ void display_handler(){
 
 void interupt_handler(){
 	// Do things with A and values on stack
+	Serial.println("Interupted");
+	Serial.println(A);
 }
 
 void loop(){
 	while(!(FL & FLAG_HALT)){
-		byte inst = ROM[ADDR++];
+		byte inst = RomFetch();
 		SwitchInst(inst);
 		
 		if(FL & FLAG_DIS > 0){

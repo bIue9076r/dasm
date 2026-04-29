@@ -13,39 +13,39 @@ void Display(void){
 // A
 
 void Load_A_Imm(void){
-	A = ROM[ADRP];
+	A = RomFetch();
 }
 
 void Load_A_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	A = MEM[addr];
+	A = GetMem(addr);
 }
 
 void Store_A_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	MEM[addr] = A;
+	SetMem(addr,A);
 }
 
 void Put_A(void){
-	STK[SK--] = A;
+	StkPut(A);
 }
 
 void Pop_A(void){
-	STK[SK++] = A;
+	A = StkPop();
 }
 
 void T_A_B(void){
@@ -59,39 +59,39 @@ void T_A_C(void){
 // B
 
 void Load_B_Imm(void){
-	B = ROM[ADRP];
+	B = RomFetch();
 }
 
 void Load_B_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	B = MEM[addr];
+	B = GetMem(addr);
 }
 
 void Store_B_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	MEM[addr] = B;
+	SetMem(addr,B);
 }
 
 void Put_B(void){
-	STK[SK--] = B;
+	StkPut(B);
 }
 
 void Pop_B(void){
-	STK[SK++] = B;
+	B = StkPop();
 }
 
 void T_B_A(void){
@@ -105,39 +105,39 @@ void T_B_C(void){
 // C
 
 void Load_C_Imm(void){
-	C = ROM[ADRP];
+	C = RomFetch();
 }
 
 void Load_C_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	C = MEM[addr];
+	C = GetMem(addr);
 }
 
 void Store_C_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	MEM[addr] = C;
+	SetMem(addr,C);
 }
 
 void Put_C(void){
-	STK[SK--] = C;
+	StkPut(C);
 }
 
 void Pop_C(void){
-	STK[SK++] = C;
+	C = StkPop();
 }
 
 void T_C_A(void){
@@ -151,20 +151,20 @@ void T_C_B(void){
 // Operations
 
 void Add_A_Imm(void){
-	byte b = ROM[ADRP];
+	byte b = RomFetch();
 	A = Add(A, b);
 }
 
 void Add_A_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	A = Add(A, MEM[addr]);
+	A = Add(A, GetMem(addr));
 }
 
 void Add_A_B(void){
@@ -176,20 +176,20 @@ void Add_A_C(void){
 }
 
 void Sub_A_Imm(void){
-	byte b = ROM[ADRP];
+	byte b = RomFetch();
 	A = Sub(A, b);
 }
 
 void Sub_A_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	A = Sub(A, MEM[addr]);
+	A = Sub(A, GetMem(addr));
 }
 
 void Sub_A_B(void){
@@ -201,20 +201,20 @@ void Sub_A_C(void){
 }
 
 void Mul_A_Imm(void){
-	byte b = ROM[ADRP];
+	byte b = RomFetch();
 	A = Mul(A, b);
 }
 
 void Mul_A_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	A = Mul(A, MEM[addr]);
+	A = Mul(A, GetMem(addr));
 }
 
 void Mul_A_B(void){
@@ -226,20 +226,20 @@ void Mul_A_C(void){
 }
 
 void And_A_Imm(void){
-	byte b = ROM[ADRP];
+	byte b = RomFetch();
 	A = And(A, b);
 }
 
 void And_A_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	A = And(A, MEM[addr]);
+	A = And(A, GetMem(addr));
 }
 
 void And_A_B(void){
@@ -251,20 +251,20 @@ void And_A_C(void){
 }
 
 void Or_A_Imm(void){
-	byte b = ROM[ADRP];
+	byte b = RomFetch();
 	A = Orr(A, b);
 }
 
 void Or_A_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	A = Orr(A, MEM[addr]);
+	A = Orr(A, GetMem(addr));
 }
 
 void Or_A_B(void){
@@ -276,20 +276,20 @@ void Or_A_C(void){
 }
 
 void Xor_A_Imm(void){
-	byte b = ROM[ADRP];
+	byte b = RomFetch();
 	A = Xor(A, b);
 }
 
 void Xor_A_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	A = Xor(A, MEM[addr]);
+	A = Xor(A, GetMem(addr));
 }
 
 void Xor_A_B(void){
@@ -301,20 +301,20 @@ void Xor_A_C(void){
 }
 
 void Add_B_Imm(void){
-	byte b = ROM[ADRP];
+	byte b = RomFetch();
 	B = Add(B, b);
 }
 
 void Add_B_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	B = Add(B, MEM[addr]);
+	B = Add(B, GetMem(addr));
 }
 
 void Add_B_A(void){
@@ -326,20 +326,20 @@ void Add_B_C(void){
 }
 
 void Sub_B_Imm(void){
-	byte b = ROM[ADRP];
+	byte b = RomFetch();
 	B = Sub(B, b);
 }
 
 void Sub_B_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	B = Sub(B, MEM[addr]);
+	B = Sub(B, GetMem(addr));
 }
 
 void Sub_B_A(void){
@@ -351,20 +351,20 @@ void Sub_B_C(void){
 }
 
 void Mul_B_Imm(void){
-	byte b = ROM[ADRP];
+	byte b = RomFetch();
 	B = Mul(B, b);
 }
 
 void Mul_B_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	B = Mul(B, MEM[addr]);
+	B = Mul(B, GetMem(addr));
 }
 
 void Mul_B_A(void){
@@ -376,20 +376,20 @@ void Mul_B_C(void){
 }
 
 void And_B_Imm(void){
-	byte b = ROM[ADRP];
+	byte b = RomFetch();
 	B = And(B, b);
 }
 
 void And_B_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	B = And(B, MEM[addr]);
+	B = And(B, GetMem(addr));
 }
 
 void And_B_A(void){
@@ -401,20 +401,20 @@ void And_B_C(void){
 }
 
 void Or_B_Imm(void){
-	byte b = ROM[ADRP];
+	byte b = RomFetch();
 	B = Orr(B, b);
 }
 
 void Or_B_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	B = Orr(B, MEM[addr]);
+	B = Orr(B, GetMem(addr));
 }
 
 void Or_B_A(void){
@@ -426,20 +426,20 @@ void Or_B_C(void){
 }
 
 void Xor_B_Imm(void){
-	byte b = ROM[ADRP];
+	byte b = RomFetch();
 	B = Xor(B, b);
 }
 
 void Xor_B_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	B = Xor(B, MEM[addr]);
+	B = Xor(B, GetMem(addr));
 }
 
 void Xor_B_A(void){
@@ -451,20 +451,20 @@ void Xor_B_C(void){
 }
 
 void Add_C_Imm(void){
-	byte b = ROM[ADRP];
+	byte b = RomFetch();
 	C = Add(C, b);
 }
 
 void Add_C_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	C = Add(C, MEM[addr]);
+	C = Add(C, GetMem(addr));
 }
 
 void Add_C_B(void){
@@ -476,20 +476,20 @@ void Add_C_A(void){
 }
 
 void Sub_C_Imm(void){
-	byte b = ROM[ADRP];
+	byte b = RomFetch();
 	C = Sub(C, b);
 }
 
 void Sub_C_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	C = Sub(C, MEM[addr]);
+	C = Sub(C, GetMem(addr));
 }
 
 void Sub_C_B(void){
@@ -501,20 +501,20 @@ void Sub_C_A(void){
 }
 
 void Mul_C_Imm(void){
-	byte b = ROM[ADRP];
+	byte b = RomFetch();
 	C = Mul(C, b);
 }
 
 void Mul_C_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	C = Mul(C, MEM[addr]);
+	C = Mul(C, GetMem(addr));
 }
 
 void Mul_C_B(void){
@@ -526,20 +526,20 @@ void Mul_C_A(void){
 }
 
 void And_C_Imm(void){
-	byte b = ROM[ADRP];
+	byte b = RomFetch();
 	C = And(C, b);
 }
 
 void And_C_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	C = And(C, MEM[addr]);
+	C = And(C, GetMem(addr));
 }
 
 void And_C_B(void){
@@ -551,20 +551,20 @@ void And_C_A(void){
 }
 
 void Or_C_Imm(void){
-	byte b = ROM[ADRP];
+	byte b = RomFetch();
 	C = Orr(C, b);
 }
 
 void Or_C_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	C = Orr(C, MEM[addr]);
+	C = Orr(C, GetMem(addr));
 }
 
 void Or_C_B(void){
@@ -576,20 +576,20 @@ void Or_C_A(void){
 }
 
 void Xor_C_Imm(void){
-	byte b = ROM[ADRP];
+	byte b = RomFetch();
 	C = Xor(C, b);
 }
 
 void Xor_C_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	C = Xor(C, MEM[addr]);
+	C = Xor(C, GetMem(addr));
 }
 
 void Xor_C_B(void){
@@ -613,15 +613,15 @@ void Not_C(void){
 }
 
 void Not_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	MEM[addr] = Not(MEM[addr]);
+	SetMem(addr,Not(GetMem(addr)));
 }
 
 void Left_Shift_A(void){
@@ -649,27 +649,27 @@ void Right_Shift_C(void){
 }
 
 void Left_Shift_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	MEM[addr] = Lsh(MEM[addr]);
+	SetMem(addr,Lsh(GetMem(addr)));
 }
 
 void Right_Shift_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	MEM[addr] = Rsh(MEM[addr]);
+	SetMem(addr,Rsh(GetMem(addr)));
 }
 
 void Inc_A(void){
@@ -685,15 +685,15 @@ void Inc_C(void){
 }
 
 void Inc_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	MEM[addr] = Inc(MEM[addr]);
+	SetMem(addr,Inc(GetMem(addr)));
 }
 
 void Dec_A(void){
@@ -709,21 +709,21 @@ void Dec_C(void){
 }
 
 void Dec_Adr(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	MEM[addr] = Dec(MEM[addr]);
+	SetMem(addr,Dec(GetMem(addr)));
 }
 
 // Jumps
 
 void Jump_Rel_Imm(void){
-	sbyte Imm = ROM[ADDR];
+	sbyte Imm = RomFetchPeek();
 	word addr = ADDR + Imm;
 	if(addr >= MAX_ROM){
 		FL = FL | FLAG_HALT;
@@ -734,8 +734,8 @@ void Jump_Rel_Imm(void){
 }
 
 void Jump_Abs(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADDR];
+	byte h = RomFetch();
+	byte l = RomFetchPeek();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_ROM){
 		FL = FL | FLAG_HALT;
@@ -746,8 +746,8 @@ void Jump_Abs(void){
 }
 
 void Jump_Zero(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_ROM){
 		FL = FL | FLAG_HALT;
@@ -760,8 +760,8 @@ void Jump_Zero(void){
 }
 
 void Jump_Over(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_ROM){
 		FL = FL | FLAG_HALT;
@@ -774,8 +774,8 @@ void Jump_Over(void){
 }
 
 void Jump_Under(void){
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_ROM){
 		FL = FL | FLAG_HALT;
@@ -788,9 +788,9 @@ void Jump_Under(void){
 }
 
 void Jump_Greater(void){
-	byte Imm = ROM[ADRP];
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte Imm = RomFetch();
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_ROM){
 		FL = FL | FLAG_HALT;
@@ -806,9 +806,9 @@ void Jump_Greater(void){
 }
 
 void Jump_Less(void){
-	byte Imm = ROM[ADRP];
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte Imm = RomFetch();
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_ROM){
 		FL = FL | FLAG_HALT;
@@ -822,9 +822,9 @@ void Jump_Less(void){
 }
 
 void Jump_Equal(void){
-	byte Imm = ROM[ADRP];
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte Imm = RomFetch();
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_ROM){
 		FL = FL | FLAG_HALT;
@@ -839,16 +839,16 @@ void Jump_Equal(void){
 }
 
 void Store_Imm_Adr(void){
-	byte Imm = ROM[ADRP];
-	byte h = ROM[ADRP];
-	byte l = ROM[ADRP];
+	byte Imm = RomFetch();
+	byte h = RomFetch();
+	byte l = RomFetch();
 	word addr = packBytes(h,l);
 	if(addr >= MAX_MEM){
 		FL = FL | FLAG_HALT;
 		return;
 	}
 
-	MEM[addr] = Imm;
+	SetMem(addr,Imm);
 }
 
 void Send(void){
