@@ -7,6 +7,8 @@
 #include <dasm_inst_set.h>
 #include <dasm_inst_switch.h>
 
+// #define DEBUG_INFO
+
 static File f;
 static File FlashMem;
 static File StackMem;
@@ -80,7 +82,7 @@ void SetMem(uint16_t addr, uint8_t b){
 
 uint8_t StkPop(){
 	StackMem = SD.open(Stk_F,O_RDWR);
-	StackMem.seek(SK++);
+	StackMem.seek(++SK);
 	byte r = StackMem.read();
 	StackMem.close();
 	return r;
@@ -88,7 +90,7 @@ uint8_t StkPop(){
 
 void StkPut(uint8_t b){
 	StackMem = SD.open(Stk_F,O_RDWR);
-	StackMem.seek(SK--);
+	StackMem.seek(--SK);
 	StackMem.write(b);
 	StackMem.close();
 }
@@ -104,21 +106,32 @@ void setup() {
 	oled.switchRenderFrame();
 
 	SetRom(0x0, I_SEND);
-	SetRom(0x1, 0x01);
+	SetRom(0x1, 0xF9);
 	SetRom(0x2, I_INC);
-	SetRom(0x3, I_JUMP);
-	SetRom(0x4, 0x00);
+	SetRom(0x3, I_JEQU);
+	SetRom(0x4, 0x10);
 	SetRom(0x5, 0x00);
+	SetRom(0x6, 0x2D);
+	SetRom(0x7, I_LDBI);
+	SetRom(0x8, 0x2);
+	SetRom(0x9, I_PUB);
+	SetRom(0xA, I_POC);
+	SetRom(0xB, 0x00);
+	SetRom(0xC, 0x00);
+	SetRom(0xD, 0x00);
+	SetRom(0x2A, I_JUMP);
+	SetRom(0x2B, 0x00);
+	SetRom(0x2C, 0x00);
+	SetRom(0x2D, I_SEND);
+	SetRom(0x2E, 0x0F);
+	SetRom(0x2F, 0xFF);
 }
 
 void display_handler(){
 	// Do things when display is called
 }
 
-void interupt_handler(uint8_t in){
-	// Do things with A and values on stack
-	// Serial.println("Interupted");
-	// Serial.println(A);
+void display_info(uint8_t in){
 	oled.clear();
 	oled.setCursor(0, 0);
 	oled.print("A: ");
@@ -142,7 +155,35 @@ void interupt_handler(uint8_t in){
 	oled.print("IS: ");
 	oled.print(in);
 	oled.switchFrame();
-	delay(1000);
+}
+
+void interupt_handler(uint8_t in){
+	// Do things with A and values on stack
+	switch(in){
+		case 0x0:
+			// bogus
+		break;
+
+		case 0x01:
+			// same as DIS
+			display_handler();
+		break;
+
+		case 0xF9:
+			// info
+			display_info(I_SEND);
+		break;
+
+		case 0x0F:
+			// Halt
+			oled.clear();
+			oled.setCursor(0, 0);
+			oled.print("Halted!");
+			oled.switchFrame();
+		break;
+	}
+
+	FL = FL & (~FLAG_INT);
 }
 
 void loop(){
@@ -154,8 +195,13 @@ void loop(){
 			display_handler();
 		}
 
+		#ifdef DEBUG_INFO
+		display_info(inst);
+		#endif
+
 		if((FL & FLAG_INT) > 0){
-			interupt_handler(inst);
+			byte itn = RomFetch();
+			interupt_handler(itn);
 		}
 	}
 	// delay(50);

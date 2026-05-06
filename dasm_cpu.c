@@ -74,11 +74,11 @@ void SetMem(word addr, byte b){
 
 #ifdef DASM_STATIC_STK
 byte StkPop(){
-	return STK[SK++];
+	return STK[++SK];
 }
 
 void StkPut(byte b){
-	STK[SK--] = b;
+	STK[--SK] = b;
 }
 #endif
 
