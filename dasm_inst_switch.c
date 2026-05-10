@@ -504,6 +504,15 @@ void SwitchInst(byte inst){
 			Send();
 		break;
 
+		case I_CALL:
+			Call();
+		break;
+
+		case I_RET:
+			Ret();
+		break;
+
+
 		default:
 			FL = FL | FLAG_HALT;
 		break;

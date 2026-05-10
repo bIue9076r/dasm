@@ -123,3 +123,5 @@
 0x7A - Jump if Equal Imm [Addr]
 0x7B - Store [Imm] [Addr]
 0x7C - Send [A]
+0x7D - Call [Addr]
+0x7E - Return

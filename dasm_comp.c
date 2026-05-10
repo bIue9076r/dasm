@@ -190,6 +190,8 @@ void freeContext(context_t* ctx){
 #define INSTN_JLT 0xFFDE881B
 #define INSTN_JGT 0xFFDF9DD3
 #define INSTN_JEQ 0xFFE11F3A
+#define INSTN_CAL 0xFFE76A02
+#define INSTN_RET 0xFFDAE50B
 
 int upper(char c){
 	return (c >= 'a' && c <= 'z')?(c - 32):(c);
@@ -314,6 +316,8 @@ int checkInst(char* inst){
 		case INSTN_JLT:
 		case INSTN_JGT:
 		case INSTN_JEQ:
+		case INSTN_CAL:
+		case INSTN_RET:
 			return 1;
 		break;
 
@@ -364,7 +368,7 @@ int expandContext(context_t* ctx){
 				case INSTN_TCB: case INSTN_POP: case INSTN_PUT:
 				case INSTN_NOT: case INSTN_LSH: case INSTN_RSH:
 				case INSTN_INC: case INSTN_DEC: case INSTN_JRE:
-				case INSTN_JMP:
+				case INSTN_JMP: case INSTN_CAL: case INSTN_RET:
 					printf("Syntax Error: [%s] has less arguments\n",inst);
 					return -1;
 				break;
@@ -1128,12 +1132,24 @@ int expandContext(context_t* ctx){
 			char arg1_f = upper(arg1[0]);
 			word val = 0x0;
 			switch(inst_n){
-				case INSTN_NOP: case INSTN_DIS: case INSTN_SND:
-				case INSTN_HLT: case INSTN_TAB: case INSTN_TAC:
-				case INSTN_TBA: case INSTN_TBC: case INSTN_TCA:
-				case INSTN_TCB:
+				case INSTN_NOP: case INSTN_DIS: case INSTN_HLT:
+				case INSTN_TAB: case INSTN_TAC: case INSTN_TBA:
+				case INSTN_TBC: case INSTN_TCA: case INSTN_TCB:
+				case INSTN_RET:
 					printf("Syntax Error: [%s] has less arguments\n",inst);
 					return -1;
+				break;
+
+				case INSTN_SND:
+					val = parseWord(arg1);
+					for(int i = 0; i < ctx->macros_size; i++){
+						if(stn(ctx->macros[i].Name) == arg1_n){
+							val = ctx->macros[i].value;
+						}
+					}
+
+					SetRom(ADRP,I_SEND);
+					SetRom(ADRP,lowbyte(val));
 				break;
 
 				case INSTN_POP:
@@ -1349,6 +1365,25 @@ int expandContext(context_t* ctx){
 					SetRom(ADRP,lowbyte(val));
 				break;
 
+				case INSTN_CAL:
+					val = parseWord(arg1);
+					for(int i = 0; i < ctx->macros_size; i++){
+						if(stn(ctx->macros[i].Name) == arg1_n){
+							val = ctx->macros[i].value;
+						}
+					}
+
+					for(int i = 0; i < ctx->labels_size; i++){
+						if(stn(ctx->labels[i].Name) == arg1_n){
+							val = ctx->labels[i].position;
+						}
+					}
+
+					SetRom(ADRP,I_CALL);
+					SetRom(ADRP,highbyte(val));
+					SetRom(ADRP,lowbyte(val));
+				break;
+
 				case INSTN_LDD: case INSTN_STR: case INSTN_ADD: case INSTN_SUB:
 				case INSTN_MUL: case INSTN_ORR: case INSTN_XOR: case INSTN_JZE:
 				case INSTN_JUN: case INSTN_JOV: case INSTN_JLT: case INSTN_JGT:
@@ -1367,12 +1402,13 @@ int expandContext(context_t* ctx){
 					SetRom(ADRP,I_NOP);
 				break;
 
-				case INSTN_DIS:
-					SetRom(ADRP,I_DISP);
-				break;
-
 				case INSTN_SND:
 					SetRom(ADRP,I_SEND);
+					SetRom(ADRP,0x00);
+				break;
+
+				case INSTN_DIS:
+					SetRom(ADRP,I_DISP);
 				break;
 
 				case INSTN_HLT:
@@ -1403,11 +1439,15 @@ int expandContext(context_t* ctx){
 					SetRom(ADRP,I_TCB);
 				break;
 
+				case INSTN_RET:
+					SetRom(ADRP,I_RET);
+				break;
+
 				case INSTN_LDD: case INSTN_POP: case INSTN_PUT: case INSTN_STR: case INSTN_ADD:
 				case INSTN_SUB: case INSTN_MUL: case INSTN_ORR: case INSTN_XOR: case INSTN_NOT:
 				case INSTN_LSH: case INSTN_RSH: case INSTN_INC: case INSTN_DEC: case INSTN_JRE:
 				case INSTN_JMP: case INSTN_JZE: case INSTN_JUN: case INSTN_JOV: case INSTN_JLT:
-				case INSTN_JGT: case INSTN_JEQ:
+				case INSTN_JGT: case INSTN_JEQ: case INSTN_CAL:
 					printf("Syntax Error: [%s] has more arguments\n",inst);
 					return -1;
 				break;
@@ -1700,7 +1740,10 @@ int main(int argc, char** argv){
 
 	printf("Dasm - Compiling [%s]\n",P);
 	ReadFile(P,&context);
-	expandContext(&context);
+	int err = expandContext(&context);
+	if(!err){
+		expandContext(&context);
+	}
 	freeContext(&context);
 	printf("Dasm - Writing [%s]\n",O);
 	WriteFile(O);

@@ -855,4 +855,30 @@ void Send(void){
 	FL = FL | FLAG_INT;
 }
 
+void Call(void){
+	byte h = RomFetch();
+	byte l = RomFetch();
+	word addr = packBytes(h,l);
+	if(addr >= MAX_ROM){
+		FL = FL | FLAG_HALT;
+		return;
+	}
+
+	StkPut(highbyte(ADDR));
+	StkPut(lowbyte(ADDR));
+	ADDR = addr;
+}
+
+void Ret(void){
+	byte l = StkPop();
+	byte h = StkPop();
+	word addr = packBytes(h,l);
+	if(addr >= MAX_ROM){
+		FL = FL | FLAG_HALT;
+		return;
+	}
+
+	ADDR = addr;
+}
+
 #endif

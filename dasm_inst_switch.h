@@ -127,6 +127,8 @@
 #define I_JEQU 0x7A
 #define I_STIA 0x7B
 #define I_SEND 0x7C
+#define I_CALL 0x7D
+#define I_RET 0x7E
 
 #define I_HALT 0xFF
 
