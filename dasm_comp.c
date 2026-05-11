@@ -384,7 +384,7 @@ int expandContext(context_t* ctx){
 
 						switch(arg1_f){
 							case 'A':
-								if(val1 < 0x100){
+								if(val1 < 0x100 && arg2[0] != '$'){
 									SetRom(ADRP,I_LDAI);
 									SetRom(ADRP,lowbyte(val1));
 								}else{
@@ -395,7 +395,7 @@ int expandContext(context_t* ctx){
 							break;
 
 							case 'B':
-								if(val1 < 0x100){
+								if(val1 < 0x100 && arg2[0] != '$'){
 									SetRom(ADRP,I_LDBI);
 									SetRom(ADRP,lowbyte(val1));
 								}else{
@@ -406,7 +406,7 @@ int expandContext(context_t* ctx){
 							break;
 
 							case 'C':
-								if(val1 < 0x100){
+								if(val1 < 0x100 && arg2[0] != '$'){
 									SetRom(ADRP,I_LDCI);
 									SetRom(ADRP,lowbyte(val1));
 								}else{
@@ -488,7 +488,7 @@ int expandContext(context_t* ctx){
 										break;
 									}
 								}else{
-									if(val1 < 0x100){
+									if(val1 < 0x100 && arg2[0] != '$'){
 										SetRom(ADRP,I_ADAI);
 										SetRom(ADRP,lowbyte(val1));
 									}else{
@@ -516,7 +516,7 @@ int expandContext(context_t* ctx){
 										break;
 									}
 								}else{
-									if(val1 < 0x100){
+									if(val1 < 0x100 && arg2[0] != '$'){
 										SetRom(ADRP,I_ADBI);
 										SetRom(ADRP,lowbyte(val1));
 									}else{
@@ -544,7 +544,7 @@ int expandContext(context_t* ctx){
 										break;
 									}
 								}else{
-									if(val1 < 0x100){
+									if(val1 < 0x100 && arg2[0] != '$'){
 										SetRom(ADRP,I_ADCI);
 										SetRom(ADRP,lowbyte(val1));
 									}else{
@@ -588,7 +588,7 @@ int expandContext(context_t* ctx){
 										break;
 									}
 								}else{
-									if(val1 < 0x100){
+									if(val1 < 0x100 && arg2[0] != '$'){
 										SetRom(ADRP,I_SUAI);
 										SetRom(ADRP,lowbyte(val1));
 									}else{
@@ -616,7 +616,7 @@ int expandContext(context_t* ctx){
 										break;
 									}
 								}else{
-									if(val1 < 0x100){
+									if(val1 < 0x100 && arg2[0] != '$'){
 										SetRom(ADRP,I_SUBI);
 										SetRom(ADRP,lowbyte(val1));
 									}else{
@@ -644,7 +644,7 @@ int expandContext(context_t* ctx){
 										break;
 									}
 								}else{
-									if(val1 < 0x100){
+									if(val1 < 0x100 && arg2[0] != '$'){
 										SetRom(ADRP,I_SUCI);
 										SetRom(ADRP,lowbyte(val1));
 									}else{
@@ -688,7 +688,7 @@ int expandContext(context_t* ctx){
 										break;
 									}
 								}else{
-									if(val1 < 0x100){
+									if(val1 < 0x100 && arg2[0] != '$'){
 										SetRom(ADRP,I_MUAI);
 										SetRom(ADRP,lowbyte(val1));
 									}else{
@@ -716,7 +716,7 @@ int expandContext(context_t* ctx){
 										break;
 									}
 								}else{
-									if(val1 < 0x100){
+									if(val1 < 0x100 && arg2[0] != '$'){
 										SetRom(ADRP,I_MUBI);
 										SetRom(ADRP,lowbyte(val1));
 									}else{
@@ -744,7 +744,7 @@ int expandContext(context_t* ctx){
 										break;
 									}
 								}else{
-									if(val1 < 0x100){
+									if(val1 < 0x100 && arg2[0] != '$'){
 										SetRom(ADRP,I_MUCI);
 										SetRom(ADRP,lowbyte(val1));
 									}else{
@@ -788,7 +788,7 @@ int expandContext(context_t* ctx){
 										break;
 									}
 								}else{
-									if(val1 < 0x100){
+									if(val1 < 0x100 && arg2[0] != '$'){
 										SetRom(ADRP,I_ORAI);
 										SetRom(ADRP,lowbyte(val1));
 									}else{
@@ -816,7 +816,7 @@ int expandContext(context_t* ctx){
 										break;
 									}
 								}else{
-									if(val1 < 0x100){
+									if(val1 < 0x100 && arg2[0] != '$'){
 										SetRom(ADRP,I_ORBI);
 										SetRom(ADRP,lowbyte(val1));
 									}else{
@@ -844,7 +844,7 @@ int expandContext(context_t* ctx){
 										break;
 									}
 								}else{
-									if(val1 < 0x100){
+									if(val1 < 0x100 && arg2[0] != '$'){
 										SetRom(ADRP,I_ORCI);
 										SetRom(ADRP,lowbyte(val1));
 									}else{
@@ -888,7 +888,7 @@ int expandContext(context_t* ctx){
 										break;
 									}
 								}else{
-									if(val1 < 0x100){
+									if(val1 < 0x100 && arg2[0] != '$'){
 										SetRom(ADRP,I_XOAI);
 										SetRom(ADRP,lowbyte(val1));
 									}else{
@@ -916,7 +916,7 @@ int expandContext(context_t* ctx){
 										break;
 									}
 								}else{
-									if(val1 < 0x100){
+									if(val1 < 0x100 && arg2[0] != '$'){
 										SetRom(ADRP,I_XOBI);
 										SetRom(ADRP,lowbyte(val1));
 									}else{
@@ -944,7 +944,7 @@ int expandContext(context_t* ctx){
 										break;
 									}
 								}else{
-									if(val1 < 0x100){
+									if(val1 < 0x100 && arg2[0] != '$'){
 										SetRom(ADRP,I_XOCI);
 										SetRom(ADRP,lowbyte(val1));
 									}else{
@@ -1685,6 +1685,7 @@ int ReadFile(char* path, context_t* ctx){
 
 			ReadLine(Line,ctx);
 			free(Line);
+			Line = NULL;
 			Line_size = 0;
 		}else{
 			if(comment){

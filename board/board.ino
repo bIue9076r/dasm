@@ -125,6 +125,8 @@ void setup() {
 	SetRom(0x2D, I_SEND);
 	SetRom(0x2E, 0x0F);
 	SetRom(0x2F, 0xFF);
+
+	randomSeed(analogRead(0));
 }
 
 void display_handler(){
@@ -167,6 +169,10 @@ void interupt_handler(uint8_t in){
 		case 0x01:
 			// same as DIS
 			display_handler();
+		break;
+
+		case 0xA0:
+			A = random(256);
 		break;
 
 		case 0xF9:
