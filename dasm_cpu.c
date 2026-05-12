@@ -78,7 +78,7 @@ byte StkPop(){
 }
 
 void StkPut(byte b){
-	STK[--SK] = b;
+	STK[SK--] = b;
 }
 #endif
 

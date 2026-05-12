@@ -7,7 +7,7 @@
 #include <dasm_inst_set.h>
 #include <dasm_inst_switch.h>
 
-// #define DEBUG_INFO
+#define DEBUG_INFO
 
 static File f;
 static File FlashMem;
@@ -90,7 +90,7 @@ uint8_t StkPop(){
 
 void StkPut(uint8_t b){
 	StackMem = SD.open(Stk_F,O_RDWR);
-	StackMem.seek(--SK);
+	StackMem.seek(SK--);
 	StackMem.write(b);
 	StackMem.close();
 }
@@ -107,18 +107,19 @@ void setup() {
 
 	SetRom(0x0, I_SEND);
 	SetRom(0x1, 0xF9);
-	SetRom(0x2, I_INC);
-	SetRom(0x3, I_JEQU);
-	SetRom(0x4, 0x10);
-	SetRom(0x5, 0x00);
-	SetRom(0x6, 0x2D);
-	SetRom(0x7, I_LDBI);
-	SetRom(0x8, 0x2);
-	SetRom(0x9, I_PUB);
-	SetRom(0xA, I_POC);
-	SetRom(0xB, 0x00);
+	SetRom(0x2, I_SEND);
+	SetRom(0x3, 0xA0);
+	SetRom(0x4, I_JEQU);
+	SetRom(0x5, 0x10);
+	SetRom(0x6, 0x00);
+	SetRom(0x7, 0x2D);
+	SetRom(0x8, I_TAB);
+	SetRom(0x9, I_NOP);
+	SetRom(0xA, I_PUB);
+	SetRom(0xB, I_POC);
 	SetRom(0xC, 0x00);
 	SetRom(0xD, 0x00);
+	SetRom(0xE, 0x00);
 	SetRom(0x2A, I_JUMP);
 	SetRom(0x2B, 0x00);
 	SetRom(0x2C, 0x00);
