@@ -7,7 +7,7 @@
 #include <dasm_inst_set.h>
 #include <dasm_inst_switch.h>
 
-#define DEBUG_INFO
+// #define DEBUG_INFO
 
 static File f;
 static File FlashMem;
@@ -174,6 +174,14 @@ void interupt_handler(uint8_t in){
 
 		case 0xA0:
 			A = random(256);
+		break;
+
+		case 0xB0:
+			byte b = StkPop();
+			byte a = StkPop();
+			unsigned int tm = a * b;
+			unsigned int then = millis();
+			while(millis() - then < tm);
 		break;
 
 		case 0xF9:
