@@ -18,7 +18,13 @@ Update:
 LDD A $0x00	# Check HP
 JEQ 0x00 Exit
 LDD A $0x01	# Check Hunger
-JEQ 0x00 Exit
+JEQ 0x00 LowerHp
+SND 0xB0	# Wait
+DEC 0x01
+RET
+LowerHp:
+LDD A $0x00
+SUB A 0x10
 RET
 
 Random:
